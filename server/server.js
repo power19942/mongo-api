@@ -3,6 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var {ObjectID} = require("mongodb");
 var {User} = require("./models/user");
+var {auth} =require("./middleware/auth");
 
 var {mongoose} = require("./DB/mongoose.js");
 var {Todo} = require("./models/todo.js");
@@ -99,6 +100,19 @@ app.post("/users",(req,res)=>{
    }).catch((e)=>{
        res.status(400).send(e);
     })
+});
+
+app.get("/users/me",auth,(req,res)=>{
+    // let token = req.header('x-auth');
+    // User.findByToken(token).then((user)=>{
+    //     if(!user){
+    //         return Promise.reject();
+    //     }
+    //     res.send(user);
+    // }).catch((e)=>{
+    //     res.status(401).send(e);
+    // });
+    res.send(req.user);
 });
 
 app.listen(port,()=>{
